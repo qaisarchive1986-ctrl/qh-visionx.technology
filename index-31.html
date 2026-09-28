@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#013283">
+<meta name="description" content="QH Dari AI Voice 3.0 - سامانه تبدیل متن به گفتار دری افغانستان">
+<title>QH Dari AI Voice 3.0 | صدای هوشمند دری افغانستان</title>
+
+<style>
+:root{
+  --blue:#013283;
+  --blue2:#018DDE;
+  --green:#73B535;
+  --teal:#028A78;
+  --pink:#F61E7C;
+  --gold:#F5A900;
+  --purple:#6B3FA0;
+  --dark:#132238;
+  --muted:#667085;
+  --bg:#f4f8fc;
+  --card:#ffffff;
+  --line:#dfe7ef;
+  --danger:#c62828;
+  --success:#23751f;
+  --shadow:0 16px 45px rgba(1,50,131,.10);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(1,141,222,.10),transparent 30%),
+    radial-gradient(circle at 90% 20%,rgba(115,181,53,.10),transparent 28%),
+    var(--bg);
+  color:var(--dark);
+  font-family:"Noto Sans Arabic","Noto Naskh Arabic",Tahoma,Arial,sans-serif;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.container{width:min(1120px,calc(100% - 28px));margin:auto}
+
+.header{
+  margin-top:18px;
+  padding:28px;
+  color:#fff;
+  border-radius:28px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2) 55%,var(--teal));
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  position:relative;
+}
+.header:after{
+  content:"";
+  position:absolute;
+  width:280px;height:280px;
+  border-radius:50%;
+  left:-90px;top:-150px;
+  border:55px solid rgba(255,255,255,.08);
+}
+.badge{
+  display:inline-flex;
+  padding:7px 13px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.1);
+  border-radius:999px;
+  font-size:12px;
+}
+.header h1{
+  margin:16px 0 7px;
+  font-size:clamp(28px,5vw,48px);
+}
+.header p{margin:0;line-height:2;color:#edf8ff;max-width:850px}
+
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:18px;
+}
+.nav button{
+  border:0;
+  padding:9px 13px;
+  border-radius:11px;
+  background:#fff;
+  color:var(--blue);
+  font-weight:700;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);
+  gap:18px;
+  margin-top:18px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.card h2{
+  margin:0 0 14px;
+  color:var(--blue);
+  font-size:21px;
+}
+.card h3{
+  color:var(--blue);
+  margin-top:22px;
+}
+label{
+  display:block;
+  font-weight:700;
+  margin:12px 0 7px;
+}
+textarea,input,select{
+  width:100%;
+  border:1px solid var(--line);
+  background:#fbfdff;
+  border-radius:14px;
+  padding:13px;
+  color:var(--dark);
+  outline:none;
+}
+textarea{
+  min-height:250px;
+  line-height:2.05;
+  resize:vertical;
+}
+textarea:focus,input:focus,select:focus{
+  border-color:var(--blue2);
+  box-shadow:0 0 0 4px rgba(1,141,222,.10);
+}
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:14px;
+}
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  font-weight:800;
+  transition:.15s;
+}
+.btn:hover{transform:translateY(-1px)}
+.primary{background:var(--blue);color:#fff}
+.green{background:var(--green);color:#fff}
+.pink{background:var(--pink);color:#fff}
+.gold{background:var(--gold);color:#18202a}
+.purple{background:var(--purple);color:#fff}
+.light{background:#edf4fa;color:var(--blue)}
+.danger{background:#feeceb;color:var(--danger)}
+
+.status{
+  margin-top:14px;
+  padding:12px 14px;
+  background:#f2f6fa;
+  border-radius:13px;
+  line-height:1.8;
+  min-height:45px;
+}
+.status.ok{background:#edf8ed;color:var(--success)}
+.status.err{background:#fff0ef;color:var(--danger)}
+
+audio{width:100%;margin-top:15px}
+
+.downloads{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.downloads a{
+  display:inline-block;
+  padding:9px 13px;
+  border-radius:10px;
+  background:var(--blue);
+  color:white;
+  text-decoration:none;
+  font-weight:700;
+  font-size:13px;
+}
+
+.info{
+  padding:13px;
+  border-right:4px solid var(--gold);
+  border-radius:12px;
+  background:#fff9e8;
+  line-height:1.9;
+  font-size:13px;
+}
+.note{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.9;
+}
+.arch{
+  display:grid;
+  gap:9px;
+}
+.arch div{
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fbfdff;
+}
+.arch b{color:var(--blue)}
+
+.health{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px;
+  background:#f6f8fa;
+  border-radius:12px;
+  font-size:13px;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  background:#98a2b3;
+}
+.dot.on{background:var(--green)}
+.dot.off{background:var(--danger)}
+
+.section{
+  margin-top:18px;
+}
+.hidden{display:none!important}
+
+.record-panel{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:end;
+}
+.timer{
+  font-size:28px;
+  font-weight:900;
+  color:var(--blue);
+  direction:ltr;
+  text-align:center;
+  padding:10px;
+}
+.record-list{
+  margin-top:14px;
+  display:grid;
+  gap:8px;
+}
+.record-item{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+  border:1px solid var(--line);
+  padding:10px;
+  border-radius:12px;
+}
+.record-item small{color:var(--muted)}
+
+.footer{
+  text-align:center;
+  padding:28px 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+@media(max-width:820px){
+  .layout{grid-template-columns:1fr}
+  .grid2{grid-template-columns:1fr}
+  .header{padding:22px}
+  .card{padding:17px}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header class="header">
+  <span class="badge">QH SMART AI • QH Dari AI Voice 3.0</span>
+  <h1>صدای هوشمند دری افغانستان</h1>
+  <p>
+    سامانهٔ آماده برای تبدیل متن دری به گفتار با Backend،
+    موتور TTS محلی، خروجی WAV و MP3 و زیرساخت صدای اختصاصی گویندهٔ دری افغانستان.
+  </p>
+
+  <nav class="nav">
+    <button onclick="scrollToId('tts')">تبدیل متن به گفتار</button>
+    <button onclick="scrollToId('record')">ضبط دیتاست</button>
+    <button onclick="scrollToId('architecture')">معماری سیستم</button>
+  </nav>
+</header>
+
+<main class="layout">
+
+<section class="card" id="tts">
+  <h2>🎙️ تبدیل متن به گفتار</h2>
+
+  <label for="apiUrl">آدرس Backend</label>
+  <input id="apiUrl" value="http://localhost:8000"
+         placeholder="http://localhost:8000">
+
+  <label for="text">متن دری</label>
+  <textarea id="text">سلام! به QH Dari AI Voice خوش آمدید.
+این سامانه برای تولید صدای طبیعی و روان به زبان دری افغانستان ساخته شده است.
+هدف ما ایجاد فناوری‌ای است که واژه‌ها و آهنگ گفتار دری را به شکل طبیعی بازتاب دهد.</textarea>
+
+  <div class="grid2">
+    <div>
+      <label for="speed">سرعت گفتار: <span id="speedValue">۱٫۰۰</span></label>
+      <input id="speed" type="range" min=".5" max="1.8" step=".05" value="1">
+    </div>
+    <div>
+      <label for="silence">مکث جمله: <span id="silenceValue">۰٫۱۵</span> ثانیه</label>
+      <input id="silence" type="range" min="0" max="1" step=".05" value=".15">
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="wavBtn">🎧 تولید WAV</button>
+    <button class="btn pink" id="mp3Btn">🎵 تولید MP3</button>
+    <button class="btn light" id="healthBtn">🔌 بررسی Backend</button>
+    <button class="btn gold" id="sampleBtn">📝 متن نمونه</button>
+    <button class="btn light" id="clearBtn">پاک‌کردن</button>
+  </div>
+
+  <div id="status" class="status">آمادهٔ استفاده.</div>
+
+  <audio id="audio" controls preload="none"></audio>
+  <div id="downloads" class="downloads"></div>
+
+  <div class="info" style="margin-top:15px">
+    <b>توجه:</b>
+    برای تولید صدای واقعی اختصاصی، باید مدل ONNX صدای گوینده در Backend نصب شده باشد.
+    این رابط کاربری خودش مدل صوتی را جعل نمی‌کند.
+  </div>
+</section>
+
+<aside class="card">
+  <h2>🧠 وضعیت سیستم</h2>
+
+  <div class="health">
+    <span id="healthDot" class="dot"></span>
+    <span id="healthText">وضعیت Backend بررسی نشده است.</span>
+  </div>
+
+  <h3>زنجیرهٔ پردازش</h3>
+  <div class="arch">
+    <div><b>۱. Frontend</b><br><span class="note">ورود متن و کنترل تولید صدا</span></div>
+    <div><b>۲. FastAPI</b><br><span class="note">دریافت متن و مدیریت درخواست</span></div>
+    <div><b>۳. Piper / ONNX</b><br><span class="note">اجرای مدل صوتی محلی</span></div>
+    <div><b>۴. WAV</b><br><span class="note">خروجی اصلی موتور TTS</span></div>
+    <div><b>۵. FFmpeg</b><br><span class="note">تبدیل WAV به MP3</span></div>
+  </div>
+
+  <h3>مدل اختصاصی</h3>
+  <p class="note">
+    مدل نهایی باید در مسیر زیر قرار گیرد:
+  </p>
+  <code dir="ltr">models/qh-dari-speaker/qh-dari.onnx</code>
+  <br><br>
+  <code dir="ltr">models/qh-dari-speaker/qh-dari.onnx.json</code>
+
+  <div class="info" style="margin-top:15px">
+    صدای اختصاصی باید از گوینده‌ای با رضایت روشن برای ضبط،
+    آموزش مدل و استفاده از صدای مصنوعی تهیه شود.
+  </div>
+</aside>
+
+</main>
+
+<section class="card section" id="record">
+  <h2>🎤 استودیوی ضبط دیتاست گوینده</h2>
+
+  <p class="note">
+    این بخش برای آماده‌سازی دادهٔ صدای اختصاصی QH Dari طراحی شده است.
+    ضبط داخل مرورگر انجام می‌شود و فایل WAV/WEBM تولید می‌کند؛
+    برای آموزش نهایی مدل، فایل‌ها باید طبق فرمت و pipeline انتخاب‌شده آماده‌سازی شوند.
+  </p>
+
+  <div class="record-panel">
+    <div>
+      <label for="speaker">شناسهٔ گوینده</label>
+      <input id="speaker" value="speaker01" placeholder="speaker01">
+    </div>
+    <div class="timer" id="timer">۰۰:۰۰</div>
+  </div>
+
+  <label for="sentence">جملهٔ ضبط</label>
+  <textarea id="sentence" style="min-height:150px">سلام، به QH Dari AI Voice خوش آمدید.</textarea>
+
+  <div class="actions">
+    <button class="btn primary" id="startRecord">🔴 آغاز ضبط</button>
+    <button class="btn light" id="stopRecord" disabled>⏹ توقف ضبط</button>
+    <button class="btn green" id="nextSentence">جملهٔ بعدی</button>
+    <button class="btn light" id="copySentence">کپی جمله</button>
+  </div>
+
+  <div id="recordStatus" class="status">آمادهٔ ضبط.</div>
+  <div id="recordDownloads" class="downloads"></div>
+
+  <h3>جمله‌های پیشنهادی برای شروع</h3>
+  <div id="sentenceList"></div>
+
+  <div class="info" style="margin-top:15px">
+    <b>حقوق گوینده:</b>
+    قبل از ضبط و آموزش مدل، رضایت روشن گوینده دربارهٔ استفاده از صدا،
+    آموزش مدل، انتشار، استفادهٔ تجاری یا غیرتجاری و شرایط حذف داده ثبت شود.
+  </div>
+</section>
+
+<section class="card section" id="architecture">
+  <h2>🏗️ معماری کامل پروژه</h2>
+
+  <div class="arch">
+    <div><b>Frontend / index.html</b><br>
+      <span class="note">رابط کاربری، تولید صدا، پخش، دانلود و استودیوی ضبط.</span>
+    </div>
+    <div><b>Backend / FastAPI</b><br>
+      <span class="note">API امن برای دریافت متن و اجرای TTS.</span>
+    </div>
+    <div><b>Local TTS / Piper</b><br>
+      <span class="note">اجرای مدل صوتی ONNX روی سرور یا کامپیوتر.</span>
+    </div>
+    <div><b>QH Dari Voice Model</b><br>
+      <span class="note">مدل اختصاصی که پس از آموزش گوینده در مسیر models قرار می‌گیرد.</span>
+    </div>
+    <div><b>FFmpeg</b><br>
+      <span class="note">تبدیل WAV به MP3.</span>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  QH Dari AI Voice 3.0 • QH SMART AI • 2026<br>
+  صدای هوشمند دری افغانستان
+</footer>
+
+</div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+const sentences = [
+  "سلام، به QH Dari AI Voice خوش آمدید.",
+  "این سامانه برای تولید صدای طبیعی و روان به زبان دری افغانستان ساخته شده است.",
+  "هدف ما ایجاد فناوری‌ای است که واژه‌ها و آهنگ گفتار دری را به شکل طبیعی بازتاب دهد.",
+  "آموزش و توانمندسازی، زمینهٔ رشد و پیشرفت جامعه است.",
+  "هر کودک حق دارد آموزش باکیفیت و فرصت برابر برای رشد داشته باشد.",
+  "کابل یکی از شهرهای مهم افغانستان است.",
+  "امروز یک روز تازه برای یادگیری و نوآوری است.",
+  "فناوری می‌تواند دسترسی مردم به آموزش و اطلاعات را آسان‌تر سازد.",
+  "ما به آیندهٔ فناوری‌های زبان دری باور داریم.",
+  "QH Dari AI Voice برای زبان دری افغانستان طراحی می‌شود."
+];
+
+let sentenceIndex = 0;
+let mediaRecorder = null;
+let chunks = [];
+let recordTimer = null;
+let recordSeconds = 0;
+
+function faNumber(value){
+  return String(value)
+    .replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d])
+    .replace(/\./g,"٫");
+}
+
+function scrollToId(id){
+  document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
+}
+
+function setStatus(message, type=""){
+  $("status").className = "status " + type;
+  $("status").textContent = message;
+}
+
+$("speed").addEventListener("input", e=>{
+  $("speedValue").textContent = faNumber(Number(e.target.value).toFixed(2));
+});
+
+$("silence").addEventListener("input", e=>{
+  $("silenceValue").textContent = faNumber(Number(e.target.value).toFixed(2));
+});
+
+$("sampleBtn").onclick = ()=>{
+  $("text").value =
+`سلام! به QH Dari AI Voice خوش آمدید.
+این سامانه برای تولید صدای طبیعی و روان به زبان دری افغانستان ساخته شده است.
+ما تلاش می‌کنیم فناوری زبان دری را برای آموزش، رسانه و خدمات دیجیتال توسعه دهیم.`;
+  setStatus("متن نمونه وارد شد.");
+};
+
+$("clearBtn").onclick = ()=>{
+  $("text").value = "";
+  $("downloads").innerHTML = "";
+  $("audio").removeAttribute("src");
+  $("audio").load();
+  setStatus("متن پاک شد.");
+};
+
+async function getError(response){
+  try{
+    const data = await response.json();
+    return data.detail || data.message || "خطای نامشخص از Backend";
+  }catch{
+    return "خطای ارتباط با Backend";
+  }
+}
+
+async function health(){
+  const url = $("apiUrl").value.trim().replace(/\/$/,"");
+  $("healthText").textContent = "در حال بررسی...";
+  $("healthDot").className = "dot";
+
+  try{
+    const response = await fetch(url + "/api/health");
+    if(!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+
+    if(data.model_exists){
+      $("healthDot").className = "dot on";
+      $("healthText").textContent = "Backend فعال است و مدل پیدا شد.";
+      setStatus("✓ Backend و مدل صوتی آماده‌اند.","ok");
+    }else{
+      $("healthDot").className = "dot off";
+      $("healthText").textContent = "Backend فعال است، اما مدل نصب نشده.";
+      setStatus("Backend فعال است؛ فایل مدل ONNX هنوز نصب نشده.","err");
+    }
+  }catch(error){
+    $("healthDot").className = "dot off";
+    $("healthText").textContent = "Backend در دسترس نیست.";
+    setStatus("✕ Backend در دسترس نیست. ابتدا FastAPI را اجرا کنید.","err");
+  }
+}
+
+$("healthBtn").onclick = health;
+
+async function generate(format){
+  const url = $("apiUrl").value.trim().replace(/\/$/,"");
+  const text = $("text").value.trim();
+
+  if(!text){
+    setStatus("لطفاً متن وارد کنید.","err");
+    $("text").focus();
+    return;
+  }
+
+  setStatus("در حال تولید " + format.toUpperCase() + " ...");
+
+  $("wavBtn").disabled = true;
+  $("mp3Btn").disabled = true;
+
+  try{
+    const response = await fetch(url + "/api/tts",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        text,
+        format,
+        speed:Number($("speed").value),
+        sentence_silence:Number($("silence").value)
+      })
+    });
+
+    if(!response.ok){
+      throw new Error(await getError(response));
+    }
+
+    const blob = await response.blob();
+
+    if(!blob.size){
+      throw new Error("فایل صوتی خالی دریافت شد.");
+    }
+
+    const objectUrl = URL.createObjectURL(blob);
+
+    $("audio").src = objectUrl;
+    $("audio").load();
+
+    const filename = "qh-dari-" +
+      new Date().toISOString().replace(/[:.]/g,"-") +
+      "." + format;
+
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = filename;
+    link.textContent = "⬇ دانلود " + format.toUpperCase();
+
+    $("downloads").innerHTML = "";
+    $("downloads").appendChild(link);
+
+    try{
+      await $("audio").play();
+    }catch{
+      // Browser may block autoplay.
+    }
+
+    setStatus("✓ فایل " + format.toUpperCase() + " با موفقیت تولید شد.","ok");
+
+  }catch(error){
+    setStatus("خطا: " + error.message,"err");
+  }finally{
+    $("wavBtn").disabled = false;
+    $("mp3Btn").disabled = false;
+  }
+}
+
+$("wavBtn").onclick = ()=>generate("wav");
+$("mp3Btn").onclick = ()=>generate("mp3");
+
+/* ---------------- Dataset recorder ---------------- */
+
+function renderSentences(){
+  const box = $("sentenceList");
+  box.innerHTML = "";
+
+  sentences.forEach((s,i)=>{
+    const div = document.createElement("div");
+    div.className = "record-item";
+
+    const left = document.createElement("div");
+    left.innerHTML = "<b>" + (i+1) + ".</b> " +
+      escapeHtml(s) +
+      "<br><small>برای ضبط انتخاب کنید</small>";
+
+    const button = document.createElement("button");
+    button.className = "btn light";
+    button.textContent = "انتخاب";
+    button.onclick = ()=>{
+      sentenceIndex = i;
+      $("sentence").value = s;
+      $("recordStatus").textContent = "جملهٔ " + faNumber(i+1) + " انتخاب شد.";
+    };
+
+    div.appendChild(left);
+    div.appendChild(button);
+    box.appendChild(div);
+  });
+}
+
+function escapeHtml(value){
+  return value.replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[char]));
+}
+
+function updateTimer(){
+  const m = Math.floor(recordSeconds/60).toString().padStart(2,"0");
+  const s = (recordSeconds%60).toString().padStart(2,"0");
+  $("timer").textContent = m + ":" + s;
+}
+
+function startTimer(){
+  recordSeconds = 0;
+  updateTimer();
+  recordTimer = setInterval(()=>{
+    recordSeconds++;
+    updateTimer();
+  },1000);
+}
+
+function stopTimer(){
+  clearInterval(recordTimer);
+  recordTimer = null;
+}
+
+$("startRecord").onclick = async ()=>{
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    $("recordStatus").className = "status err";
+    $("recordStatus").textContent =
+      "مرورگر یا محیط فعلی اجازهٔ ضبط صدا نمی‌دهد. صفحه را از HTTPS یا localhost اجرا کنید.";
+    return;
+  }
+
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+
+    chunks = [];
+
+    let mime = "audio/webm";
+    if(MediaRecorder.isTypeSupported("audio/webm;codecs=opus")){
+      mime = "audio/webm;codecs=opus";
+    }
+
+    mediaRecorder = new MediaRecorder(stream,{mimeType:mime});
+
+    mediaRecorder.ondataavailable = e=>{
+      if(e.data && e.data.size) chunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = ()=>{
+      stream.getTracks().forEach(track=>track.stop());
+
+      const blob = new Blob(chunks,{type:mime});
+      const url = URL.createObjectURL(blob);
+
+      const speaker = ($("speaker").value.trim() || "speaker01")
+        .replace(/[^a-zA-Z0-9_-]/g,"_");
+
+      const number = String(sentenceIndex+1).padStart(4,"0");
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = speaker + "-" + number + ".webm";
+      link.textContent = "⬇ ذخیره ضبط " + number;
+
+      $("recordDownloads").innerHTML = "";
+      $("recordDownloads").appendChild(link);
+
+      $("recordStatus").className = "status ok";
+      $("recordStatus").textContent =
+        "✓ ضبط آماده شد. فایل را ذخیره کنید و در مرحلهٔ آماده‌سازی دیتاست به WAV تبدیل کنید.";
+    };
+
+    mediaRecorder.start();
+    startTimer();
+
+    $("startRecord").disabled = true;
+    $("stopRecord").disabled = false;
+
+    $("recordStatus").className = "status";
+    $("recordStatus").textContent = "🔴 در حال ضبط... جمله را واضح و طبیعی بخوانید.";
+
+  }catch(error){
+    $("recordStatus").className = "status err";
+    $("recordStatus").textContent =
+      "دسترسی به میکروفون داده نشد: " + error.message;
+  }
+};
+
+$("stopRecord").onclick = ()=>{
+  if(mediaRecorder && mediaRecorder.state !== "inactive"){
+    mediaRecorder.stop();
+  }
+
+  stopTimer();
+  $("startRecord").disabled = false;
+  $("stopRecord").disabled = true;
+};
+
+$("nextSentence").onclick = ()=>{
+  sentenceIndex = (sentenceIndex + 1) % sentences.length;
+  $("sentence").value = sentences[sentenceIndex];
+
+  $("recordStatus").className = "status";
+  $("recordStatus").textContent =
+    "جملهٔ " + faNumber(sentenceIndex+1) + " آمادهٔ ضبط است.";
+};
+
+$("copySentence").onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText($("sentence").value);
+    $("recordStatus").textContent = "متن جمله کاپی شد.";
+  }catch{
+    $("recordStatus").textContent = "کاپی خودکار در این مرورگر در دسترس نیست.";
+  }
+};
+
+renderSentences();
+
+/*
+  نکتهٔ فنی:
+  مرورگر معمولاً WebM/Opus ضبط می‌کند، نه WAV خام.
+  برای آموزش مدل TTS، فایل‌ها را در Backend/FFmpeg
+  به WAV mono با sample rate مورد نیاز pipeline تبدیل کنید.
+*/
+</script>
+</body>
+</html>
